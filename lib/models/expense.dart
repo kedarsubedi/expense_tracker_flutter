@@ -9,10 +9,10 @@ const uuid = Uuid();
 enum Category { food, travel, leisure, work } //treats kinda like string
 
 const categoryIcons = {
-  Category.food : Icons.lunch_dining,
-  Category.travel : Icons.flight_takeoff,
-  Category.leisure : Icons.movie,
-  Category.work : Icons.work,
+  Category.food: Icons.lunch_dining,
+  Category.travel: Icons.flight_takeoff,
+  Category.leisure: Icons.movie,
+  Category.work: Icons.work,
 };
 
 class Expense {
@@ -30,7 +30,31 @@ class Expense {
   final Category category;
 
   //getter properties are dynamically derived, base on other class properties
-  String get formattedDate{
+  String get formattedDate {
     return formatter.format(date);
+  }
+}
+
+class ExpenseBucket {
+  const ExpenseBucket({
+    required this.category,
+    required this.expenses,
+  });
+
+  //alternative constructor function filtering out the expeses belonging to specific category
+  ExpenseBucket.forCategory(List<Expense> allExpense, this.category)
+      : expenses = allExpense
+            .where((expense) => expense.category == category)
+            .toList();
+
+  final Category category;
+  final List<Expense> expenses;
+
+  double get totalExpenses {
+    double sum = 0;
+    for (final expense in expenses) {
+      sum = sum + expense.amount;
+    }
+    return sum;
   }
 }
